@@ -1,0 +1,29 @@
+%report.tex
+%Model LaTeX file for first-year report at the
+%School of Mathematics, University of Edinburgh
+
+
+\documentclass[12pt]{report}
+
+\title{(Co)ends: a taster}
+\author{Malthe Sporring}
+\date{August 2023}
+
+\usepackage[]{edmaths}
+
+\begin{document}
+
+\maketitle
+
+
+\tableofcontents
+\input{coends.tex}
+\newpage
+\input{homotopy.tex}
+%\appendix
+
+%\chapter{First Appendix}
+
+\addcontentsline{toc}{chapter}{References}
+\bibliography{bibtex}
+\end{document}

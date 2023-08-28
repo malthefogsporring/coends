@@ -1,0 +1,392 @@
+\chapter{(Co)end calculus}
+\section{Introduction}
+(Co)ends are a categorical tool that organizes and clarifies many concepts in category theory. They have the reputation of a secret tool of category theorists, although they are fairly easy to define and motivate. The scope of this text is to briefly set up the theory of (co)ends and highlight how they can be used to clarify ideas in category theory. The original reference is \cite{Yoneda60}, but our exposition is based on the modern account given in \cite{Loregian21}. No results should be assumed to be original.
+%Our main contribution is a briefer account focused on homotopy theory, as well as an exposition inspired by ring(oid)s.
+
+This text is organized as follows: we give two motivations for (co)ends; in Section \ref{sec:categorical-bimodule} as invariants associated to categorical bimodules and in Section \ref{sec:dinatural-transformations} as terminal and initial cones with respect to a modified definition of a natural transformation. We then give brief proofs of the main results about (co)ends that constitute a 'calculus' in Section \ref{sec:coend-proofs}. Finally, in Section \ref{sec:weighted-colimits} we introduce weighted (co)limits via (co)ends and describe how they give a model for homotopy (co)limits.
+
+\section{Categorical bimodules}\label{sec:categorical-bimodule}
+%Let $G$ be a group, considered as a single-object category where all maps are isomorphisms. Then a (left and right) $G-$set is exactly the data of a functor $X':G^{op}\times G\rightarrow \Set$, where $X:=X'(*)$ picks out the set, and the action $g\cdot (-) \cdot h:X\rightarrow X$ is given by $X'(h,g).$ Contravariance in the first argument dictates that compositions of right actions is contravariant in the group law: $x\cdot (gh)=(x\cdot g)\cdot h.$ An invariant of a $G$-set is the subset $Sym(X)$ of points $x$ where the left and right actions act symmetrically, i.e. $g\cdot x=x\cdot g$. It can be identified as an equalizer
+%$$Sym(X)\cong eq\big(X\rightrightarrows \prod_{g\in G} X\big)$$
+%where the two maps are given by $x\mapsto (g\cdot x)_{g\in G}$ and $x\mapsto (x\cdot g)_{g\in G}$, respectively. 
+%Similarly, 
+%$$Sym(X)\cong coeq\big(\coprod_{g\in G} X\big)\rightrightarrows X $$
+%where the two maps are given by $(g,x)\mapsto g\cdot x$ and $(g,x)\mapsto x\cdot g$, respectively.
+
+A ring is a pre-additive category $R$ (i.e an $Ab-$enriched category) with a single object, where maps correspond to ring elements and composition is defined by $r\circ s=rs$. An $R$-bimodule is then an additive functor $M':R^{op}\times R\rightarrow Ab$, where $M:=M(*)$ picks out the module as an abelian group, and multiplication $r\cdot(-)\cdot s:M\rightarrow M$ is given by $M'(s,r)$. Contravariance in the first argument dictates that multiplication on the right is contravariant with respect to the ring multiplication, i.e. $m\cdot (rs)=(m\cdot r)\cdot s$. 
+
+Any such bimodule has two invariants associated with it. First, we can identify the \defn{centre} $Z_R(M)$, which is the largest submodule such that $R$ acts symmetrically as a bimodule. It can be identified as a submodule
+$$Z_R(M)=\{m\in M:r\cdot m=m\cdot r \quad \forall r\in R\},$$
+or as an equalizer
+$$Z_R(M)=eq\big(M\rightrightarrows \bigoplus_{r\in R} M\big),$$
+where the two maps are defined by $m\mapsto (rm)_{r\in R}$, and $m\mapsto (mr)_{r\in R}$ respectively.
+
+On the other hand, we can form the \defn{space of $R$-coinvariants}, which is the largest quotient $M_R$ of $M$ in $Ab$ that identifies $r\cdot m$ with $m\cdot r$ for each $r\in R$ and $m\in M$. That is, $$M_R=M/\langle r\cdot m-m\cdot r: r \in R, m\in M\rangle,$$ or, as a coequalizer,
+$$M_R=coeq\big(\bigoplus_{r\in R} M\rightrightarrows M\big),$$
+where the maps are induced by $(r,m)\mapsto r\cdot m$ and $(r,m)\mapsto m\cdot r$, respectively. 
+
+We can generalize these ideas to an arbitrary functor  $$F:C^{op}\times C\rightarrow D$$ which we call a \defn{categorical bimodule}. We can also make sense of $V-$enriched bimodules; see \cite{Loregian21}. Unless stated otherwise, we will always assume bimodules have locally small domain. Then, subject to the existence of certain (co)limits in $D$, we can study two invariants. Firstly, the \defn{end} of $F$
+$$\int_{c\in C} F(c,c):=eq\Big(\prod_{c\in C}F(c,c)\rightrightarrows \prod_{f:c\rightarrow d} F(c,d)\Big)$$
+where the two maps are induced by
+$$\prod_c F(c,c)\xrightarrow[]{proj} F(c,c)\xrightarrow[]{F(id,f)}F(c,d),$$
+$$\prod_c F(c,c)\xrightarrow[]{proj} F(d,d)\xrightarrow[]{F(f,id)}F(c,d),$$
+respectively, for each $f:c\rightarrow d$. Dually, we can study the \defn{coend} of $F$
+$$\int^{c\in C} F(c,c):=coeq\Big(\coprod_{f:c\rightarrow d}F(c,d)\rightrightarrows \coprod_{c\in C} F(c,c)\Big),$$
+where the two maps are induced by
+$$F(d,c)\xrightarrow[]{F(id,f)}F(d,d)\xhookrightarrow{}\coprod_{c\in C} F(c,c),$$
+$$F(d,c)\xrightarrow[]{F(f,id)}F(c,c)\xhookrightarrow{}\coprod_{c\in C} F(c,c),$$
+respectively, for each $f:c\rightarrow d$. When the context is clear, we will use the simpler notation $\int_c F(c,c)$ or $\int_c F$.
+
+As in the previous example, we can interpret the end $\int_{c} F(c,c)$ as a subobject of $\prod_c F(c,c)$ which classifies the 'fixed points' of the action $F(fd,d)\rightarrow F(c,fc)$ for all $f:c\rightarrow d$. Meanwhile, the coend $\int^c F(c,c)$ is the 'quotient' of the diagonal $\coprod F(c,c)$ which symmetrizes the same action of $F$ on arrows. This interpretation turns out to be very fruitful:
+\begin{itemize}
+    \item Categorical bimodules, and their (co)ends, are everywhere. 
+    \item (Co)ends admit a sort of calculus, from which proofs and formulations become almost algorithmic.
+\end{itemize}
+
+To justify the first point, any functor $F:C\rightarrow D$ can be promoted to a categorical bimodule $\overline{F}$ defined by the composition $$\overline{F}:C^{op}\times C\xrightarrow[]{proj_C}C\xrightarrow[]{F} D$$ i.e. by making $\overline{F}$ mute in the first variable. Then the (co)end of $\overline{F}$ is exactly the (co)limit of $F$; the formula for a (co)end becomes exactly the formula for a general (co)limit in terms of (co)equalizers and (co)products. Furthermore, all right and left Kan extensions are ends and coends, respectively. By extension of the mantra "all concepts are Kan extensions", so too are all concepts co/ends.
+
+We have already described ends and coends as limits and colimits, respectively, so properties enjoyed by all (co)limits are also enjoyed by (co)ends. In particular, right adjoints preserve ends, left adjoints preserve coends, and the $Hom_D(-,=)$ bifunctor enjoys the properties:
+$$Hom_D(\int^cF,G)\iso \int_cHom_D(F,G)\iso Hom(F,\int_cG).$$
+Furthermore, there is a "formula sheet" of coend calculus, with isomorphisms holding up to the existence of the relevant (co)ends. Here the tensor $\otimes$ and cotensor $\pitchfork$ are defined for any $V-$enriched category $C$, when they exist, such that there are adjunctions
+$$(-\tensor c):V\dashv C:C(c,-)$$
+and
+$$(-\cotensor c):V^{op}\vdash C:C(-,c)$$
+for each $c\in C$. For any category $C$, considered as enriched over $\Set$ with the cartesian product, the tensor and cotensor exist when coproducts and products exist respectively, and are given, for $s\in \Set$ and $c\in C$, by
+$$s\tensor c:= \coprod_{s}c,\qquad s\cotensor c:= \prod_{s}c.$$
+In particular, when $C=\Set$, $$s\tensor x\iso s\times x, \qquad s\cotensor x\iso \Set(s,x).$$\newline\setlength{\fboxsep}{5pt}
+\begin{figure}[ht]
+    \centering
+\fbox{
+  \parbox{\textwidth-40pt}{
+    Let $H:C^{op}\times C \times D^{op}\times D\rightarrow E$.\\
+    $\bullet$ (Fubini's theorem) $\int_c\int_d H\iso \int_d\int_c H\iso \int_{c\times d} H$\\
+    $\bullet$ (Fubini's theorem) $\int^c\int^d H\iso \int^d\int^c H\iso \int^{c\times d} H$\\
+
+    Let $F,G:C\rightarrow D$. \\
+    $\bullet$ (Natural transformations as end) $Nat(F,G)\iso \int_c D(Fc,Gc)$\\
+
+    Let $K:C^{op}\rightarrow \Set$.\\
+    $\bullet$ (The Yoneda lemma) $K\iso \int_c \Set(C(c,-),Kc)$\\
+    $\bullet$ (The co-Yoneda lemma) $K\iso \int^c Kc\times C(-,c)$\\
+
+    Let $H:C\rightarrow \Set$.\\
+    $\bullet$ (The Yoneda lemma) $H\iso \int_c \Set(C(-,c),Hc)$\\
+    $\bullet$ (The co-Yoneda lemma) $H\iso \int^c Hc\times C(c,-)$\\
+
+    Let $F:C\rightarrow D$ and $G:C\rightarrow E$.\\
+    $\bullet$ $\text{Lan}_FG\iso\int^cD(Fc,-)\otimes Gc$\\
+    $\bullet$ $\text{Ran}_FG\iso \int_c D(-,Fc)\pitchfork Gc$ \\
+  }
+}\label{table:coends}
+\end{figure}
+
+
+We will prove the above theorems shortly. However first, let us demonstrate the algorithmic nature of coend calculus with an example. We say a right Kan extension is \defn{pointwise} if it is preserved by representable functors i.e. if following diagram exists and the right triangle commutes:
+    % https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGEQBfU9TXfIRQBGclVqMWbAKLdeIDNjwEiZYePrNWiEABE5fJYKIAmMdU1SdAZRg5u4mFADm8IqABmAJwgBbJGQgOBBIZhJabABiBiDefgHUwUii4VYgAOIxcf6IKUmIAMwWktog0gAUMKQAtACUWT45YfkplqUASnRgAPqRmdQMdABGMAwACvzKQiBeWM4AFvY8no2hiSGFxRE6nT2RAAQVVen1A8OjE0YqOrML9tQjYFBI1QWBDFhgpVB0cPNODi4QA
+\[\begin{tikzcd}
+C \arrow[d, "F"] \arrow[r, "G"]                                            & E \arrow[r, "{E(e,-)}"] & \Set \\
+D \arrow[ru, "Ran_FG"'] \arrow[rru, "{Ran_F E(e,G)}"', dashed, bend right] &                         &    
+\end{tikzcd}\]
+This is equivalent to the condition that the Kan extension has an end formula as above, as we now prove. Compare this with the standard proof in category theory, i.e. Thm 6.3.7 of \cite{Riehl}.
+
+\begin{proposition}
+Let $F:C\rightarrow D$ and $G:C\rightarrow E$, and suppose the right Kan extension $Ran_FG$ exists. Then it is pointwise if and only if $$\text{Ran}_FG\iso \int_c D(-,Fc)\pitchfork Gc,$$ and this end exists.
+\end{proposition}
+\begin{proof}
+    On one hand, suppose $E(e,Ran_FG)\iso Ran_FE(e,G)$ for all $e\in E.$ Since $\Set$ is bicomplete, an end formula exists of the form 
+    $$E(e,Ran_FG)\iso \int_{c} D(-,Fc)\cotensor E(e,Gc)\iso \int_c \Set(D(-,Fc),E(e,Gc))$$
+    $$\iso \int_cE\big(e,D(-,Fc)\cotensor Gc\big)\iso E\big(e,\int_cD(-,Fc)\cotensor Gc\big).$$
+    Since $e$ was arbitrary, by the Yoneda lemma, $$Ran_FG\iso \int_cD(-,Fc)\cotensor Gc.$$
+
+    Following the string of isomorphisms in the reverse direction shows if $Ran_FG$ has an end formula, so does $E(e,Ran_FG)$ as the desired Kan extension.
+\end{proof}
+
+\section{Additional perspectives}\label{sec:dinatural-transformations}
+In the previous section, we saw that (co)ends arise as natural invariants associated to categorical bimodules. In this section, we will see that (co)ends also arise, in a similar way to (co)limits, as initial and terminal cones, but with a modified notion of natural transformation.
+
+Let us return to our previous example of an $R-$bimodule $M',N':R^{op}\times R\rightarrow Ab$. Let's define a \defn{pseudo-homomorphism of bimodules} $f:M\rightarrow N$ as a group homomorphism such that $r\cdot f(m\cdot r)=f(r\cdot m)\cdot r$ for every $r\in R, m\in M$. This may seem like a useless definition - for example, there is no well-defined composition of pseudo-homomorphisms. However, it concisely gives the universal property of the space of coinvariants $M_R$ (and dually, that of the center $Z_R(M)$). Indeed, $M_R$ is initial among trivial\footnote{Recall this is the only way we can think of $M_R$ as an $R$-bimodule in general.} $R-$bimodules with a pseudo-homomorphism from $M$.
+
+This definition can be extended to any categorical bimodule. We make the following definition:
+\begin{definition}
+A \defn{dinatural transformation} $\alpha:F\Rrightarrow R$ between bimodules $F,G:C^{op}\times C\rightarrow D$ consists of maps $\alpha_c:F(c,c)\rightarrow G(c,c)$ such that for all $f:c\rightarrow d$ in $C$, the following square commutes.
+
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcBDAGwFcYkQAxACilIGMAlCAC+pdJlz5CKcqWLU6TVu259+Q0eOx4CRAExyFDFm0ScepKBrEgM2qUVl6jS0yADiXNYJE27k3RQDZxpjZTNPXitfLQDpElIAZhcTdk81aOEFGCgAc3giUAAzACcIAFskWRAcCCQyRVSzbiLSLGiaRnoAIxhGAAUJHWkQEqxcgAscGJBSiqqaWqQDRvDzdtIi62KyysQVpcQAFlDXdgAdc6Y0CfoAfSgZub2Gw8TTppBL69u7vhBOj0+oN7IFRuMpk9dkh3jU6ogAKwfNaeDZbAEgLq9AZDBxmMaTaaaWbQ46LeFI1ZuTytdoaSjCIA
+\[\begin{tikzcd}
+                                  & {F(d,c)} \arrow[ld, "{F(f,id)}"'] \arrow[rd, "{F(id,f)}"] &                                  \\
+{F(c,c)} \arrow[d, "\alpha_c"']   &                                                           & {F(d,d)} \arrow[d, "\alpha_d"]   \\
+{G(c,c)} \arrow[rd, "{G(id,f)}"'] &                                                           & {G(d,d)} \arrow[ld, "{G(f,id)}"] \\
+                                  & {G(c,d)}                                                  &                                 
+\end{tikzcd}\]
+
+If $F$ is a constant functor with a dinatural transformation $\alpha:F \Rrightarrow G$, we call $F$ a \defn{wedge} over $G$.
+\end{definition}
+
+The definition of dinatural transformation is motivated by thinking of a categorical bimodule $F:C^{op}\times C\rightarrow D$ as depending on $c$ both contravariantly and covariantly at the same time, which is not something a standard natural transformation can fully account for. We will only need to consider wedges, but see \cite{Loregian21} for an account of dinatural transformations and the closely related extranatural transformations. Let us define a morphism of wedges $\alpha:E\Rrightarrow F$ and $\alpha':E'\Rrightarrow F$ over $F:C^{op}\times C\rightarrow D$ as a map $f:E\rightarrow E'$ such that the following diagram commutes for all $c\in C$:
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRABEQBfU9TXfIRQAmclVqMWbdgHJuvEBmx4CRAIyk14+s1aIQAMQAUAY1ImAlN3EwoAc3hFQAMwBOEALZIyIHBCSiErpsADohjGgAFnQA+iYg1Ax0AEYwDAAK-CpCIK5YdpE48i7uXogavv6IgTpS+mER0TJxxSBunt7UfkgVtXpt1lxAA
+\[\begin{tikzcd}
+E \arrow[rd, "\alpha_c"'] \arrow[rr, "f"] &          & E' \arrow[ld, "\alpha'_c"] \\
+                                          & {F(c,c)} &                           
+\end{tikzcd}\]
+These combine into a category $Wd(F)$ of wedges over $F$, for which it is little more than an unpacking of definition to show the end $\int_c F$ is the terminal object, if it exists. This gives ends a familiar classification to limits, as the terminal wedge over the diagram $F$. Indeed, by the universal properties of the product and equalizer, a cone $E$ over the diagram $$\prod_{c\in C}F(c,c)\rightrightarrows \prod_{f:c\rightarrow d} F(c,d)$$ is exactly given by maps $\alpha_c:E\rightarrow F(c,c)$ that are equalized in each component of $$\prod_{f:c\rightarrow d} F(c,d),$$ i.e. so
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAFEQBfU9TXfIRRkAjFVqMWbAGIAKAMal5ASm68QGbHgJER5cfWatEIOVFJRVPPlsG7SY6oakm5iy93EwoAc3hFQADMAJwgAWyQyEBwIJD0JIzYAHSTGNAALOgB9eRBqBjoAIxgGAAV+bSEQYKwfdJw1INCIxCiYpAAmJ0ljEBS0zKyoRpAQ8M7qdsQAZm7E11lA0iwPa1HmuMnYmbmXU1kV0kCrCi4gA
+\[\begin{tikzcd}
+E \arrow[d, "\alpha_c"'] \arrow[r, "\alpha_d"] & {F(d,d)} \arrow[d, "{F(f,id)}"] \\
+{F(c,c)} \arrow[r, "{F(id,f)}"]                & {F(c,d)}                       
+\end{tikzcd}\]
+commutes for each $f:c\rightarrow d$. The end is by definition terminal among these maps, which are exactly wedge maps over $F.$
+
+Of course, one can make the completely analogous definition of a \defn{cowedge} under $F$, and arrive at the coend $\int^c F$ as the initial object in the category $coW(F)$ of cowedges, if it exists.
+
+Let us also include a third perspective of (co)ends, which is useful for generalizing (co)ends to higher categories. Given a category $C$, we define the \defn{twisted arrow category} $Tw(C)$ such that
+\begin{itemize}
+\item The objects of $Tw(C)$ are the maps $f:c\rightarrow d$ in $C$.
+\item A morphism between $f:c\rightarrow d$ and $g:x\rightarrow y$ consist of morphisms $j:x\rightarrow c$ and $h:d\rightarrow y$ such that the following diagram commutes:
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGMQBfU9TXfIRRkAjFVqMWbKN14gM2PASIjy4+s1aIQAD1l9FglaTHUNU7QE9u4mFADm8IqABmAJwgBbJGRA4ISKoSmmwuINQMdABGMAwACvxKQiBuWPYAFjj6IO5eSABM1P5IAMxmklog9tm53oiFfgGIvuaVAFbhIJEx8YlG2qkZWTyuHnVBxYhlwRYg6Z3dsQmGygNpmTZcQA
+\[\begin{tikzcd}
+c \arrow[d, "f"'] & x \arrow[d, "g"] \arrow[l, "j"'] \\
+d \arrow[r, "h"'] & y                               
+\end{tikzcd}\]
+\end{itemize}
+The "twist" refers to the fact that morphims in $Tw(C)$ are pairs $(j,h)$ of a contravariant and a covariant morphism. There is an evident functor $$p:Tw(C)\rightarrow C^{op}\times C$$ $$(f:c\rightarrow d)\mapsto (c,d)\qquad % https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGMQBfU9TXfIRRkAjFVqMWbKN14gM2PASIjy4+s1aIQAD1l9FglaTHUNU7QE9u4mFADm8IqABmAJwgBbJGRA4ISKoSmmwuINQMdABGMAwACvxKQiBuWPYAFjj6IO5eSABM1P5IAMxmklog9tm53oiFfgGIvuaVAFbhIJEx8YlG2qkZWTyuHnVBxYhlwRYg6Z3dsQmGygNpmTZcQA
+\begin{tikzcd}
+c \arrow[d, "f"'] & x \arrow[d, "g"] \arrow[l, "j"'] \\
+d \arrow[r, "h"'] & y                               
+\end{tikzcd} \mapsto (j,h)$$ %More???
+Indeed, expanding the limit of $F\circ p$ in terms of products an equalizers, we recover exactly the limit-form of the end of $F$, so
+$$\text{lim}_{Tw(C)}(F\circ p)\iso \int_c F.$$
+and similarly for the coend. Since we have a twisted arrow $\infty$-category \cite{HA}, this is the easiest form of (co)ends to generalize to $\infty$-categories. 
+
+%Here's another perspective: to enforce the idea that the morphisms $(f,id)$ and $(id,f)$ are the same morphism, we can think of a bimodule $F:C^{op}\times C\rightarrow D$ as secretly being the composition of $Tw(C)\rightarrow C^{op}\times C\rightarrow D$, where $Tw(C)$ is the \defn{twisted arrow category} of $C$:
+
+
+%Let's contemplate what is a good definition of morphism between two such bimodules. Of course we could take additive natural transformations, and this will recover the standard definition of bimodule homomorphism. However, there is something a bit more fundamental: taking the view that an $R-$bimodule acts by $r$ on $M$
+
+%Returning to our example of an $R-$bimodule $M':R^{op}\times R\rightarrow Ab$, a natural transformation between two bimodules $M'$ and $N'$ is exactly a bimodule homomorphism. For more complicated categorical bimodules, however, we do not recover the correct notion of morphism. As an example, we can define a \defn{ringoid} $\mathcal{R}$ as an $Ab-$category, similar to how we define a \defn{groupoid} as a many-object group. Let us consider an additive functor $\mathcal{M}':\mathcal{R}^{op}\times \mathcal{R}\rightarrow Ab$, which we will call a bimodule over the ringoid $\mathcal{R}$. What is a natural definition of an $\mathcal{R}-$bimodule homomorphism? On one hand, we can ask for an additive natural transformation $\alpha:\mathcal{M'}\Rightarrow N'$, whose components $\alpha_{(S,R)}:\prescript{}{R}{M}_S\rightarrow \prescript{}{R}{N}_S$ would be $(R,S)$-bimodule homomorphisms.
+\section{(Co)end formulas}\label{sec:coend-proofs}
+We give brief proofs of the main (co)end formulas from Section \ref{sec:categorical-bimodule}.
+
+\begin{prop}[Natural transformations as end]\label{prop:nat-as-end}
+
+Let $F,G:C\rightarrow D$. Then $$Nat(F,G)\iso \int_c D(Fc,Gc)$$
+\end{prop}
+\begin{proof}
+    This is little more than a description of the definition of a natural transformation. A wedge over $D(F-,G-)$ is a set $X$ with maps $X\xrightarrow[]{-_c}D(Fc,Gc)$ for each $c$ such that the following diagrams commute.
+    % https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAA0QBfU9TXfIRQBGclVqMWbACIAKAGJRSAcSgBKbrxAZseAkTLDx9Zq0Qg58gMYqrGnn12Cioo9RNTzlm6vviYUADm8ESgAGYAThAAtkhkIDgQSKISpmwAHgD6UJrhUbGI8YlIAEzukmYgWVYg1Ax0AEYwDAAK-HpCIBFYgQAWOLkgkTGl1MWIAMzlaV6yWErKYfZawwUp41OpnhYKYaTzflxAA
+\[\begin{tikzcd}
+X \arrow[r, "-_d"] \arrow[d, "-_c"'] & {D(Fd,Gd)} \arrow[d, "{D(Ff,id)}"] \\
+{D(Fc,Gc)} \arrow[r, "{D(id,Gf)}"]   & {D(Fc,Gd)}                        
+\end{tikzcd}\]
+For each element $x\in X$, this is exactly saying that the maps $x_c:Fc\rightarrow Gc$ are components of a natural transformation $x:F\Rightarrow G$. In other words, a wedge is exactly a subset of $Nat(F,G)$ with the obvious cowedge maps. Obviously, $Nat(F,G)$ is terminal among these.
+\end{proof}
+\begin{remark}
+    Note the end formula for the Yoneda lemma is just a special case of Proposition \ref{prop:nat-as-end} for $\Set$-valued functors $H:C\rightarrow \Set$:
+    $$H(-)\iso Nat\big(C(-,=),H(=)\big)\iso \int_c Set\big(C(-,c),Hc\big)$$
+    and similarly for the contravariant version.
+\end{remark}
+
+We will now prove the coend form of the \textit{co-Yoneda lemma} for covariant functors. The version for presheaves follows immediately, and unpacks as the familiar statement "every presheaf is a colimit of representables".
+\begin{prop}[co-Yoneda Lemma]
+        Let $H:C\rightarrow \Set$ be a functor. Then
+    $$H(-)\iso \int^c Hc\times C(c,-)$$
+\end{prop}
+We give two proofs. First, a hands-on object-wise proof. Second, a proof using (co)end calculus. Hopefully this demonstrates how (co)end calculus takes the tedium out of object-wise categorical proofs.
+\begin{proof}[Proof 1]
+
+Let us describe $H$ as a cowedge under $H(=)\times C(=,-)$. For each $c\in C$ we have a natural transformation $$\alpha^c:Hc\times C(c,-)\rightarrow H$$ whose components are given by
+$$\alpha^c_d:Hc\times C(c,d)\rightarrow Hd \qquad (x,f)\mapsto (Hf)(x)$$
+The cowedge condition then says that for all $f:c\rightarrow d$, $g:d\rightarrow e$ and $x\in Hc$, $$(Hg\circ f)(x)=(Hg)(Hfx)$$
+which is satisfied by functoriality of $H$.
+
+Given any other cowedge $J$ with legs $\beta^c$ for $c\in C$, a cowedge morphism $\gamma:H\Rightarrow J$ is a natural transformation whose components satisfy $$\gamma_d(Hf(x))=\beta^c_d(x,f)$$ for each $c\in C$, $x\in Hc$, $f:c\rightarrow d$. There is at most one such map, given by $\gamma_d(y)=\beta_d^d(y,id)$. Note we then automatically get
+$$\gamma_d(Hf(x))=\beta_d^d(Hf(x),id)=\beta_d^c(x,f)$$ 
+by the cowedge condition on $\beta$.
+
+Finally, the $\gamma_d$ assemble to a natural transformation since the square in question
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAAkBjEAX1PUy58hFGQCMVWoxZt2UXvxAZseAkTHlJ9Zq0QgAUtz4CVw9aQnVtMvfvk9JMKAHN4RUADMAThAC2SACZqHAgkAGYraV0DDwVPH39EMhAQpA0pHVlY6gY6ACMYBgAFQVUREC8sZwALHDiQbz8kZNTEIIybEAAdLoKcOgB9TgA9TgAKAFpSLCgASnrGxPTWiI7onr7BqGGoSem5kBz8wpLTNT1KmrqHHiA
+\[\begin{tikzcd}
+Hc \arrow[d, "Hf"'] \arrow[r, "{\beta_c^c(-,id)}"] & Jc \arrow[d, "Jf"] \\
+Hd \arrow[r, "{\beta_d^d(-,id)}"']                 & Jd                
+\end{tikzcd}\] is a special case of the naturality square for $\beta^c$ combined with its cowedge condition:
+
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcBDAGwFcYkQApAYxAF9T0mXPkIoyxanSat2HKHwEgM2PASLkKkhizaIQACS4AdI3gC28AAQBhABRdSXAJQLBKketISa2mXsMm5lZ2DlAu-G7CaigaAExa0roGxqZYFnA2tlCkYa5KQqqiJKTxPons+lCBacFZOeGSMFAA5vBEoABmAE4QZkixNDgQSBpSOuwmAEYwOPQAelwA+jwRIN29SADMg8OIZGN+IFMz80vyq+t9iKNDSPu+SRwdeZf9O1tl43q2WNkdJlwsF0uJYALQuGiMejTRgABQKHj0XSwzQAFjgXj0rgAWd6IbYHJI-bKggFAkEdcKKV6IACsePu5T0x1miygc3kkOhMDhCOiIGRaIxFyxSFxIFudM+h1s+g6pF+DV4QA
+\[\begin{tikzcd}
+{Hc\times C(c,c)} \arrow[r, "\beta^c_c"] \arrow[d, "{(id,f\circ -)}"'] & Jc \arrow[d, "Jf"]                        \\
+{Hc\times C(c,d)} \arrow[r, "\beta^c_d"]                               & Jd                                        \\
+{Hc\times C(d,d)} \arrow[u, "{(id,-\circ f)}"] \arrow[r, "{(Hf,id)}"]  & {Hd\times C(d,d)} \arrow[u, "\beta_d^d"']
+\end{tikzcd}\]
+In particular, in the subdiagram spanned by $Hc\times \{id\}$ in the top left corner, the left-most maps become isomorphisms and the diagram collapses to the desired one.
+
+\end{proof}
+\begin{proof}[Proof 2] Let $x,y\in C$. Then \begin{align*}\Set (\int^c Hc\times C(c,x),y)&\iso \int_c Set\big(Hc\times C(c,x),y\big)\\
+&\iso \int_c Set\big(C(c,x),Set(Hc,y)\big)\\
+&\iso Nat\big(C(-,x),Set(H-,y)\big) & \text{(Nat as end)}\\
+&\iso Set(Hx,y) &\text{(The Yoneda lemma)}
+\end{align*}
+Therefore, by the Yoneda embedding, 
+$$Hx\iso \int^c Hc\times C(c,x).$$
+Since all the isomorphisms used are natural in $x$, this isomorphism also holds as functors.
+    
+\end{proof}
+
+We will now prove Fubini's theorem for (co)ends. This will follow as an easy corollary of a deeper result, namely the following:
+
+\begin{lemma}\label{lem:fubini-adjunction}
+    Suppose all ends exist for functors of the form $F:C^{op}\times C\rightarrow D$. Then the end construction defines a functor $$\int_c:Fun(C^{op}\times C,D)\rightarrow D$$ that is a right adjoint.
+\end{lemma}
+\begin{proof}
+For functoriality of $\int_c$, we note if $\alpha:F\Rightarrow G$ is a natural transformation of bimodules, then $$\int_cF\rightarrow F(c,c)\xrightarrow[]{\alpha_{(c,c)}}G(c,c)$$ is a cowedge over $G$, giving a unique cowedge map $\int_cF\rightarrow \int_c G$. By uniqueness, this is functorial with respect to vertical composition of natural transformations.
+
+The left adjoint  is defined by $$H_c:D\rightarrow Fun(C^{op}\times C,D) \qquad d\mapsto C(-,=)\tensor d$$
+with the obvious correspondence on maps. We will prove construct the (co)unit maps of the adjunction, as in Exercise 1.14 of \cite{Fubini}.
+
+For the unit $\eta:id\rightarrow \int_c\circ H_c$, notice that each $d\in D$ is a wedge over $$C(-,=)\tensor d$$ with legs $$d\rightarrow \coprod_{C(c,c)}d$$ the inclusion at the identity. This gives rise to unique wedge maps $$\eta_d:d\rightarrow \int_c\big(C(c,c)\tensor d\big)$$ which assemble to a natural transformation.
+
+The counit $\epsilon: H_c\circ \int_c \rightarrow id$ has component at $J:C^{op}\times C\rightarrow D$ given by
+$$\epsilon_J:C(-,=)\tensor\int_c J\Rightarrow J$$ which in turn have components given by
+$$\epsilon_{J,(c,c')}:\coprod_{C(c,c')}\int_cJ(c,c)\rightarrow J(c,c')$$
+defined on each component at $f:c\rightarrow c'$ by the composition $$\int_c J(c,c)\mapsto J(c,c)\xrightarrow[]{(id,J(f))} J(c,c').$$ The wedge condition ensures this assembles to a natural transformation $\epsilon.$
+
+We now confirm the triangle identities. First,
+$$(\epsilon H_c) \circ (H_c\eta)$$ is a natural transformation whose components at $d$ are
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGEAKAWlIF4AlAB0hOGGDgQATgAIoIAL6l0mXPkIoAjOSq1GLNl158RYidJkisYHAH0Axl3ul7w0eMmz5SldjwEiACYdanpmVkQOHn43M085RV0YKABzeCJQADMpCABbJDIQHAgkTR8QbLzS6mKkQIUKBSA
+\[\begin{tikzcd}
+{C(-,=)\tensor d} \arrow[r] & {C(-,=)\tensor \int_cC(c,c)\tensor d} \arrow[r] & {C(-,=)\tensor d}
+\end{tikzcd}\]
+By construction, on each component $f\in C(c,c')$, this is the identity map.
+
+Second,
+$$(\int_c \epsilon)\circ (\eta \int_c)$$ is a natural transformation whose component at $J$ is
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAB12swcB9AYwAEAKRABfUuky58hFAEZyVWoxZtO3PsH4ByMZwBGWAOYAKAMKndpXQEpOOGGDgQAToI08BwwydvjJEAxsPAIiACYlanpmVkQOLi9tPU8+IVExZRgoY3giUAAzVwgAWyQyEBwIJHkJQuKyxEVK6sRwzLEgA
+\[\begin{tikzcd}
+\int_c J \arrow[r] & {\int_{c'}\big(C(c',c')\tensor \int_cJ\big)} \arrow[r] & \int_{c'}J
+\end{tikzcd}\]
+
+
+The first map is the wedge map induced by $$\int_cJ\xrightarrow[]{(id,id)} C(c',c')\tensor \int_c J$$ while 
+the second is the wedge map induced by $$\int_{c'}\big(C(c',c')\tensor \int_c J\big)\rightarrow \big(C(c',c')\tensor \int_c J\big)\rightarrow \coprod_{f:c\rightarrow c'}J(c,c')$$
+so the long map is the wedge map induced by the legs $$\int_cJ \rightarrow J(c,c),$$ which is the identity.
+
+\end{proof}
+\begin{theorem}[Fubini's theorem]
+    Let $$F:C^{op}\times C\times E^{op}\times E\rightarrow D$$ Then if either of the following exist, they all do and are isomorphic.
+    $$\int_e\int_c F\iso \int_e\int_c F\iso \int_{(c,e)}F.$$
+    Similarly,
+    $$\int^e\int^c F\iso \int^e\int^c F\iso \int^{(c,e)}F.$$
+
+\end{theorem}
+To make sense of the statement, when writing $\int_c F$, we implicitly mean the end of $$\overline{F}:C^{op}\times C\rightarrow Fun(E^{op}\times E,D)$$ defined by $$\overline{F}(c,d):=F(c,d,-,=),$$
+and similarly for $\int_e F$.
+\begin{proof}
+    We prove the statement for ends. The statement for (co)ends is obtained by a similar argument. By Lemma \autoref{lem:fubini-adjunction}, it is enough to show that $H_e\circ H_c\iso H_c\circ H_e\iso H_{(c,e)}$, interpreted properly. Then the result will follow by uniqueness of adjoints. We have
+    $$H_{(c,e)}(\equiv):=(C\times E)(-,=)\tensor (\equiv)\iso \big(C(-,=)\tensor E(-,=)\big)\tensor (\equiv)$$
+    so the result follows by associativity and commutativity of the tensor product.
+\end{proof}
+
+We finish this section by giving an extremely useful characterisation of Kan extensions as (co)ends.
+
+\begin{proposition}[Kan extensions as (co)ends]\label{prop:kan-is-end}
+Let $F:C\rightarrow D$ and $G:C\rightarrow E$. Then the following isomorphisms hold whenever the relevant (co)ends exist.
+$$\text{Lan}_FG\iso\int^cD(Fc,-)\otimes Gc$$
+$$\text{Ran}_FG\iso \int_c D(-,Fc)\pitchfork Gc$$\end{proposition}
+\begin{proof} We will prove the result for right Kan extensions - the other result follows by a dual argument. The universal property defining $Ran_FG$ is that for any $H:D\rightarrow E$
+$$Nat(H,Ran_FG)\iso Nat(HF,G).$$ We then have
+
+\begin{align*}
+Nat(HF,G) & \iso \int_c E\big(HF(c),G(c)\big)& \text{(Nat as end)}\\
+& \iso \int_c \int_d Set\big( D(d,Fc),E(Hd,Gc)\big)& \text{(Yoneda on $E(-,Gc)$)}\\
+ & \iso \int_c \int_dE\big(Hd,D(d,Fc)\cotensor Gc\big) & \text{(Cotensor adjunction)}\\
+ & \iso \int_c Nat\big(H,D(-,Fc)\cotensor Gc\big) & \text{(Nat as end)}\\
+ & \iso  Nat\big(H,\int_cD(-,Fc)\cotensor Gc\big). &
+\end{align*}
+The desired isomorphism follows by the Yoneda embedding.\end{proof}
+
+The previous proof demonstrates the deductive nature of (co)end proofs. We started with $Nat(HF,G)$ and wanted to reach something of the form $Nat(H,?)$. We then used the rules available to us to \textit{rearrange} the 'variables' to the correct form. 
+
+\section{Weighted (co)limits}\label{sec:weighted-colimits}
+A cone over a diagram $F:C\rightarrow D$ is a natural transformation $x\Rightarrow F$ from a constant functor, and a limit is then a terminal cone. The universal property of the limit $\lim F$ is therefore that $$D(x,\lim F)\iso Nat(1,D(x,F-)),$$
+where $1$ represents the terminal functor $C\rightarrow \Set$. There is no reason we cannot generalize this to other representing functors $W:C\rightarrow \Set$, which we call \defn{weights} for the functor $F:C\rightarrow D$. We will then define the \defn{limit of $F$ weighted by $W$}, $\lim^WF$, by the universal property
+$$D(x,\wlim{W} F)\iso Nat(W,D(x,F-)),$$
+if it exists. Similarly, the \defn{colimit of $F$ weighted by $W$}, $\colim^W$, has the property
+$$D(\colim^{W} F,x)\iso Nat(D(x,F-),W),$$
+if it exists. 
+
+There is good reason to do this. Firstly, many objects arise naturally as weighted (co)limits. Secondly, while we will see that the theory of (co)limits absorb the theory of weighted limits in the standard setting, this is not true in the enriched setting. In particular, there is not always a good notion of "constant functor" in the enriched setting, crucial for defining conical limits. For example, the constant functor $$B:Ab\rightarrow Ab, A\mapsto B, f\mapsto id_B$$ is not additive. So in the enriched setting we really need a generalized definition of (co)limit.
+
+Weighted colimits arise as certain (co)ends, which is helpful for clarifying computations.
+\begin{proposition}\label{prop:wlims-are-ends}
+Let $F:C\rightarrow D$ and $W:C\rightarrow Set$ be functors, and assume the set-tensor, set-cotensor, and relevant (co)ends exists in $D$. Then
+$$\wlim{W}F\iso \int_c W(c)\cotensor F(c)$$
+$$\colim^{W}F\iso \int^c W(c)\tensor F(c).$$
+\end{proposition}
+\begin{proof}
+    Let $x\in D$. Then $$D\big(x,\int_c W(c)\cotensor F(c)\big)\iso \int_cD\big(x,W(c)\cotensor F(c)\big)\iso \int_c \Set\big(W(c),D(x,F(c))\big)$$
+    $$\iso Nat\big(W,D(x,F-)\big)$$
+    so the desired isomorphism for weighted limits follows by the Yoneda lemma. 
+    
+    Similarly, $$D\big(\int^c W(c)\tensor F(c),x\big)\iso \int_cD\big(W(c)\tensor F(c),x\big)\iso \int_c \Set\big(W(c),D(F(c),x)\big)$$
+    $$\iso Nat\big(W,D(F-,x)\big).$$
+\end{proof}
+
+We can use Proposition\autoref{prop:wlims-are-ends} to prove statements about weighted (co)limits using (co)ends, and vice-versa. In particular, combined with Proposition \ref{prop:kan-is-end}, we get a description of Kan extensions as weighted limits:
+
+    $$\text{Ran}_GF(-)\iso\wlim{D(-,G=)}F$$
+    $$\text{Lan}_GF(-)\iso\colim^{D(G=,-)}F$$
+
+
+\begin{remark}
+    As has been the theme so far, Proposition\autoref{prop:wlims-are-ends} also has a dual version: (co)ends are certain weighted (co)limits. This uses the previous remark, along with the fact that for any functor $H$, $H\iso Ran_{id}H$.
+    
+    Let $F:C^{op}\times C\rightarrow D$ and suppose its end exists. Then for every $d\in D$, 
+    
+    \begin{align*}D\big(d,\int_cF(c,c)\big)&\iso \int_c D\big(d,F(c,c)\big)\\
+    &\iso \int_cD\big(d,\int_{c'}C(c,c')\cotensor F(c,c')\big)&\text{(Right Kan extension)}\\
+    &\iso \int_{(c,c')}\Set\Big(C(c,c'),D\big(d, F(c,c')\big)\Big)&\text{($\cotensor$ adjunction)}\\
+    &\iso Nat\Big(C(-,=),D\big(d,F(-,=)\big)\Big)
+    \end{align*}
+    Hence $$\int_cF(c,c)\big)\iso \text{lim}^{C(-,=)}F$$ by the universal property of weighted limits. A similar proof shows
+    $$\int^cF(c,c)\big)\iso \text{colim}^{C(-,=)}F$$
+\end{remark}
+
+Let us give a homotopy theoretic reason to be interested in weighted limits. The category $\catname{hTop}_*$ of pointed topological spaces and homotopy equivalence classes of maps is not well-behaved under (co)limits. For example, it does not have pushouts. Consider the two pushout diagrams in $\catname{Top}_*$:
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGUA9ARhAF9S6TLnyEU3clVqMWbAFT9BIDNjwEiZblPrNWiEAoFDVoohK3Uds-YaUqR6lACZJlmXo49Fxh2OQBmV2ldNgARTidvZWE1PxcLYOsQcMijaJNHANIEqw8uVKkYKABzeCJQADMAJwgAWyQyEBwIJG406rqG6makJ3aa+sQXJpbEf37OxAkRpHGlDsGAFm7RgFYJpZWkADYNna3EAHY9xFWD44o+IA
+\[\begin{tikzcd}
+S^1 \arrow[r] \arrow[d] & * \arrow[d] & S^1 \arrow[r] \arrow[d] & D^2 \arrow[d] \\
+* \arrow[r]             & *           & D^2 \arrow[r]           & S^2          
+\end{tikzcd}\]
+where the two maps $S^1\rightarrow D^2$ are both the inclusion of the boundary. Under the obvious functor $\catname{Top}_*\rightarrow \catname{hTop}_*$, these should be identified with the same pushout diagram since $D^2$ is contractible. However, $S^2$ is not contractible. This can be fixed by considering a suitable weighted limit, giving a model for homotopy (co)limits. in particular, consider a diagram $F:J\rightarrow M$ in a model category equipped with $sSet$-variants of $\tensor,\cotensor,[-,=]$ with the appropriate adjunctions. Then
+$$\text{hlim} F\iso \text{lim}^{N(J/-)}F\iso \int_j N(J/j)\cotensor F(j)$$ 
+and dually
+$$\text{hcolim} F\iso \text{colim}^{N(-/J)}F\iso \int^j N(j/J)\tensor F(j).$$ 
+
+Here $N(J/-):J\rightarrow sSet$ sends an object $j$ to the nerve of its under category $J/j$. That is, a $0-$simplex is a map $i\rightarrow j$, a $1-$simplex is a commutative triangle % https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcBDAGwFcYkQArEAX1PU1z5CKchWp0mrdlh58QGbHgJFRxcQxZtEILAHIe4mFADm8IqABmAJwgBbJGRA4IScr0s37iAEw1nr9xBrOwc-Fx9uSm4gA
+\[\begin{tikzcd}
+i \arrow[r] \arrow[d] & j \\
+i' \arrow[ru]         &  
+\end{tikzcd}\] a $2-$simplex is a commutative $3-$simplex
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZAJgBoAGAXVJADcBDAGwFcYkQArEAX1PU1z5CKAIwVqdJq3ZYefEBmx4CRMSIkMWbRCCwByOfyVCi5UupqbpO-Qe4SYUAObwioAGYAnCAFskYkBwIJHJeD28-RDJA4MRQ+S9ffxogpGIwkETIgGYU2PjwpMRcmP8MrKQS1Kj7biA
+\[\begin{tikzcd}
+                                     & i \arrow[r] \arrow[d] & j \\
+i'' \arrow[rru] \arrow[ru] \arrow[r] & i' \arrow[ru]         &  
+\end{tikzcd}\]
+and so on, with the obvious face and degeneracy maps. 
+
+We can motivate the homotopy limit construction by the following observations:
+\begin{enumerate}
+    \item For any category $C$ with a terminal object $1$, $N(C)$ is contractible, essentially because $|N(C)|$ is star-shaped at the terminal object. In particular, $N(J/j)$ is contractible since $(J/j)$ has a terminal object $j\xrightarrow[]{id} j.$
+    \item 
+    $N(J/-)$ is a fibrant object in $Cat(J,sSet)$.
+\end{enumerate}
+We have described a \textit{fibrant replacement} of the terminal weight: $N(J/-)$ should be thought of as a contractible but \textit{fattened up} version of the terminal functor which keeps track of homotopy equivalences. For more details, see \cite{Loregian21} and \cite{Riehl14}.
+
+%\begin{example}
+%Let's motivate homotopy colimits by a down-to-earth example. Experts will see how to make this formal. The category $\text{hTop}_*$ has a $(\tensor,Hom)$ adjunction given by the smash product $\wedge$ and $Hom$ with the compact-open topology. So we can define the set-tensor . Consider the diagram $J\rightarrow \text{hTop}_*$ given by
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGUA9ARhAF9S6TLnyEU3clVqMWbAFT9BIDNjwEiZblPrNWiEAr5SYUAObwioAGYAnCAFskZEDghJuA63ceJnrpABMRnxAA
+%\[\begin{tikzcd}
+%S^1 \arrow[r] \arrow[d] & * \\
+%*                       &  
+%\end{tikzcd}\] 
+
+%Then  a cowedge $X$ under $\int^j N(j/J)\wedge F(j)$ is just a map $S^1\wedge S^1\iso S^2\rightarrow X$, which $S^2$ is clearly initial among. This gives the 'correct' answer for the homotopy colimit mentioned above.
+%\end{example}
+%\section{Enriched (co)ends}
+%\section{Homotopy (co)limits}\label{sec:homotopy-colimits}
