@@ -378,15 +378,25 @@ We can motivate the homotopy limit construction by the following observations:
 \end{enumerate}
 We have described a \textit{fibrant replacement} of the terminal weight: $N(J/-)$ should be thought of as a contractible but \textit{fattened up} version of the terminal functor which keeps track of homotopy equivalences. For more details, see \cite{Loregian21} and \cite{Riehl14}.
 
-%\begin{example}
-%Let's motivate homotopy colimits by a down-to-earth example. Experts will see how to make this formal. The category $\text{hTop}_*$ has a $(\tensor,Hom)$ adjunction given by the smash product $\wedge$ and $Hom$ with the compact-open topology. So we can define the set-tensor . Consider the diagram $J\rightarrow \text{hTop}_*$ given by
-% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGUA9ARhAF9S6TLnyEU3clVqMWbAFT9BIDNjwEiZblPrNWiEAr5SYUAObwioAGYAnCAFskZEDghJuA63ceJnrpABMRnxAA
-%\[\begin{tikzcd}
-%S^1 \arrow[r] \arrow[d] & * \\
-%*                       &  
-%\end{tikzcd}\] 
 
-%Then  a cowedge $X$ under $\int^j N(j/J)\wedge F(j)$ is just a map $S^1\wedge S^1\iso S^2\rightarrow X$, which $S^2$ is clearly initial among. This gives the 'correct' answer for the homotopy colimit mentioned above.
-%\end{example}
+\begin{example}
+Let's motivate homotopy colimits by a computation. Let \newline$F:J\rightarrow sSet$ be the pushout diagram
+% https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAB1206AnPRgAScAIjAY46APQBMIAL6l0mXPkIoAjOSq1GLNiLETJxeYpAZseAkTLrt9Zq0Qd2o8VJNztMKAHN4RKAAZjwQALZIZCA4EEjqCsGhEYhRMUjSXnJAA
+\[\begin{tikzcd}
+\partial \Delta^2 \arrow[r] \arrow[d] & \Delta^0 \\
+\Delta^0                              &         
+\end{tikzcd}\] with its obvious underlying diagram $J$, and note that $\partial \Delta^2$ is a minimal model for the circle. We recall $sSet$ is self-tensored with $X\tensor Y\iso X\times Y$, where $$(X\times Y)_n\iso X_n\times Y_n$$ with the obvious face and degeneracy maps. 
+Then $$\text{hcolim}F\iso \int^jN(j/J)\times F(j)$$ is the initial cowedge
+\[
+\begin{tikzcd}
+                                                  & \text{hcolim}F                                 &                                                    \\
+\Delta^0 \arrow[ru]                               &                                                & \Delta^0 \arrow[lu]                                \\
+\partial \Delta^2 \arrow[u] \arrow[r, "{(1,id)}"] & \Lambda^2_0\times \partial \Delta^2 \arrow[uu] & \partial \Delta^2 \arrow[l, "{(2,id)}"'] \arrow[u]
+\end{tikzcd}\]
+This is $\partial \Delta^2*\partial \Delta^1$, which is a model for $S^2$ - the correct answer to our motivating example. Repeating the argument for a general $X\in sSet$, we get that the homotopy pushout along two points is $X*\partial \Delta^1$ - is a model for the suspension $\Sigma|X|$, as expected.
+
+
+
+\end{example}
 %\section{Enriched (co)ends}
 %\section{Homotopy (co)limits}\label{sec:homotopy-colimits}
