@@ -3,9 +3,9 @@
 (Co)ends are a categorical tool that organizes and clarifies many concepts in category theory. They have the reputation of a secret tool of category theorists, although they are fairly easy to define and motivate. The scope of this text is to briefly set up the theory of (co)ends and highlight how they can be used to clarify ideas in category theory. The original reference is \cite{Yoneda60}, but our exposition is based on the modern account given in \cite{Loregian21}. No results should be assumed to be original.
 %Our main contribution is a briefer account focused on homotopy theory, as well as an exposition inspired by ring(oid)s.
 
-This text is organized as follows: we give two motivations for (co)ends; in Section \ref{sec:categorical-bimodule} as invariants associated to categorical bimodules and in Section \ref{sec:dinatural-transformations} as terminal and initial cones with respect to a modified definition of a natural transformation. We then give brief proofs of the main results about (co)ends that constitute a 'calculus' in Section \ref{sec:coend-proofs}. Finally, in Section \ref{sec:weighted-colimits} we introduce weighted (co)limits via (co)ends and describe how they give a model for homotopy (co)limits.
+This text is organized as follows: we give two motivations for (co)ends; in Section \ref{sec:bifunctor} as invariants associated to bifunctors and in Section \ref{sec:dinatural-transformations} as terminal and initial cones with respect to a modified definition of a natural transformation. We then give brief proofs of the main results about (co)ends that constitute a 'calculus' in Section \ref{sec:coend-proofs}. Finally, in Section \ref{sec:weighted-colimits} we introduce weighted (co)limits via (co)ends and describe how they give a model for homotopy (co)limits.
 
-\section{Categorical bimodules}\label{sec:categorical-bimodule}
+\section{Bifunctors}\label{sec:bifunctor}
 %Let $G$ be a group, considered as a single-object category where all maps are isomorphisms. Then a (left and right) $G-$set is exactly the data of a functor $X':G^{op}\times G\rightarrow \Set$, where $X:=X'(*)$ picks out the set, and the action $g\cdot (-) \cdot h:X\rightarrow X$ is given by $X'(h,g).$ Contravariance in the first argument dictates that compositions of right actions is contravariant in the group law: $x\cdot (gh)=(x\cdot g)\cdot h.$ An invariant of a $G$-set is the subset $Sym(X)$ of points $x$ where the left and right actions act symmetrically, i.e. $g\cdot x=x\cdot g$. It can be identified as an equalizer
 %$$Sym(X)\cong eq\big(X\rightrightarrows \prod_{g\in G} X\big)$$
 %where the two maps are given by $x\mapsto (g\cdot x)_{g\in G}$ and $x\mapsto (x\cdot g)_{g\in G}$, respectively. 
@@ -25,7 +25,7 @@ On the other hand, we can form the \defn{space of $R$-coinvariants}, which is th
 $$M_R=coeq\big(\bigoplus_{r\in R} M\rightrightarrows M\big),$$
 where the maps are induced by $(r,m)\mapsto r\cdot m$ and $(r,m)\mapsto m\cdot r$, respectively. 
 
-We can generalize these ideas to an arbitrary functor  $$F:C^{op}\times C\rightarrow D$$ which we call a \defn{categorical bimodule}. We can also make sense of $V-$enriched bimodules; see \cite{Loregian21}. Unless stated otherwise, we will always assume bimodules have locally small domain. Then, subject to the existence of certain (co)limits in $D$, we can study two invariants. Firstly, the \defn{end} of $F$
+We can generalize these ideas to an arbitrary functor  $$F:C^{op}\times C\rightarrow D$$ which we call a \defn{bifunctor}. We can also make sense of $V-$enriched bimodules; see \cite{Loregian21}. Unless stated otherwise, we will always assume bimodules have locally small domain. Then, subject to the existence of certain (co)limits in $D$, we can study two invariants. Firstly, the \defn{end} of $F$
 $$\int_{c\in C} F(c,c):=eq\Big(\prod_{c\in C}F(c,c)\rightrightarrows \prod_{f:c\rightarrow d} F(c,d)\Big)$$
 where the two maps are induced by
 $$\prod_c F(c,c)\xrightarrow[]{proj} F(c,c)\xrightarrow[]{F(id,f)}F(c,d),$$
@@ -39,11 +39,11 @@ respectively, for each $f:c\rightarrow d$. When the context is clear, we will us
 
 As in the previous example, we can interpret the end $\int_{c} F(c,c)$ as a subobject of $\prod_c F(c,c)$ which classifies the 'fixed points' of the action $F(fd,d)\rightarrow F(c,fc)$ for all $f:c\rightarrow d$. Meanwhile, the coend $\int^c F(c,c)$ is the 'quotient' of the diagonal $\coprod F(c,c)$ which symmetrizes the same action of $F$ on arrows. This interpretation turns out to be very fruitful:
 \begin{itemize}
-    \item Categorical bimodules, and their (co)ends, are everywhere. 
+    \item Bifunctors, and their (co)ends, are everywhere. 
     \item (Co)ends admit a sort of calculus, from which proofs and formulations become almost algorithmic.
 \end{itemize}
 
-To justify the first point, any functor $F:C\rightarrow D$ can be promoted to a categorical bimodule $\overline{F}$ defined by the composition $$\overline{F}:C^{op}\times C\xrightarrow[]{proj_C}C\xrightarrow[]{F} D$$ i.e. by making $\overline{F}$ mute in the first variable. Then the (co)end of $\overline{F}$ is exactly the (co)limit of $F$; the formula for a (co)end becomes exactly the formula for a general (co)limit in terms of (co)equalizers and (co)products. Furthermore, all right and left Kan extensions are ends and coends, respectively. By extension of the mantra "all concepts are Kan extensions", so too are all concepts co/ends.
+To justify the first point, any functor $F:C\rightarrow D$ can be promoted to a bifunctor $\overline{F}$ defined by the composition $$\overline{F}:C^{op}\times C\xrightarrow[]{proj_C}C\xrightarrow[]{F} D$$ i.e. by making $\overline{F}$ mute in the first variable. Then the (co)end of $\overline{F}$ is exactly the (co)limit of $F$; the formula for a (co)end becomes exactly the formula for a general (co)limit in terms of (co)equalizers and (co)products. Furthermore, all right and left Kan extensions are ends and coends, respectively. By extension of the mantra "all concepts are Kan extensions", so too are all concepts co/ends.
 
 We have already described ends and coends as limits and colimits, respectively, so properties enjoyed by all (co)limits are also enjoyed by (co)ends. In particular, right adjoints preserve ends, left adjoints preserve coends, and the $Hom_D(-,=)$ bifunctor enjoys the properties:
 $$Hom_D(\int^cF,G)\iso \int_cHom_D(F,G)\iso Hom(F,\int_cG).$$
@@ -102,11 +102,11 @@ Let $F:C\rightarrow D$ and $G:C\rightarrow E$, and suppose the right Kan extensi
 \end{proof}
 
 \section{Additional perspectives}\label{sec:dinatural-transformations}
-In the previous section, we saw that (co)ends arise as natural invariants associated to categorical bimodules. In this section, we will see that (co)ends also arise, in a similar way to (co)limits, as initial and terminal cones, but with a modified notion of natural transformation.
+In the previous section, we saw that (co)ends arise as natural invariants associated to bifunctors. In this section, we will see that (co)ends also arise, in a similar way to (co)limits, as initial and terminal cones, but with a modified notion of natural transformation.
 
 Let us return to our previous example of an $R-$bimodule $M',N':R^{op}\times R\rightarrow Ab$. Let's define a \defn{pseudo-homomorphism of bimodules} $f:M\rightarrow N$ as a group homomorphism such that $r\cdot f(m\cdot r)=f(r\cdot m)\cdot r$ for every $r\in R, m\in M$. This may seem like a useless definition - for example, there is no well-defined composition of pseudo-homomorphisms. However, it concisely gives the universal property of the space of coinvariants $M_R$ (and dually, that of the center $Z_R(M)$). Indeed, $M_R$ is initial among trivial\footnote{Recall this is the only way we can think of $M_R$ as an $R$-bimodule in general.} $R-$bimodules with a pseudo-homomorphism from $M$.
 
-This definition can be extended to any categorical bimodule. We make the following definition:
+This definition can be extended to any bifunctor. We make the following definition:
 \begin{definition}
 A \defn{dinatural transformation} $\alpha:F\Rrightarrow R$ between bimodules $F,G:C^{op}\times C\rightarrow D$ consists of maps $\alpha_c:F(c,c)\rightarrow G(c,c)$ such that for all $f:c\rightarrow d$ in $C$, the following square commutes.
 
@@ -121,7 +121,7 @@ A \defn{dinatural transformation} $\alpha:F\Rrightarrow R$ between bimodules $F,
 If $F$ is a constant functor with a dinatural transformation $\alpha:F \Rrightarrow G$, we call $F$ a \defn{wedge} over $G$.
 \end{definition}
 
-The definition of dinatural transformation is motivated by thinking of a categorical bimodule $F:C^{op}\times C\rightarrow D$ as depending on $c$ both contravariantly and covariantly at the same time, which is not something a standard natural transformation can fully account for. We will only need to consider wedges, but see \cite{Loregian21} for an account of dinatural transformations and the closely related extranatural transformations. Let us define a morphism of wedges $\alpha:E\Rrightarrow F$ and $\alpha':E'\Rrightarrow F$ over $F:C^{op}\times C\rightarrow D$ as a map $f:E\rightarrow E'$ such that the following diagram commutes for all $c\in C$:
+The definition of dinatural transformation is motivated by thinking of a bifunctor $F:C^{op}\times C\rightarrow D$ as depending on $c$ both contravariantly and covariantly at the same time, which is not something a standard natural transformation can fully account for. We will only need to consider wedges, but see \cite{Loregian21} for an account of dinatural transformations and the closely related extranatural transformations. Let us define a morphism of wedges $\alpha:E\Rrightarrow F$ and $\alpha':E'\Rrightarrow F$ over $F:C^{op}\times C\rightarrow D$ as a map $f:E\rightarrow E'$ such that the following diagram commutes for all $c\in C$:
 % https://tikzcd.yichuanshen.de/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRABEQBfU9TXfIRQAmclVqMWbdgHJuvEBmx4CRAIyk14+s1aIQAMQAUAY1ImAlN3EwoAc3hFQAMwBOEALZIyIHBCSiErpsADohjGgAFnQA+iYg1Ax0AEYwDAAK-CpCIK5YdpE48i7uXogavv6IgTpS+mER0TJxxSBunt7UfkgVtXpt1lxAA
 \[\begin{tikzcd}
 E \arrow[rd, "\alpha_c"'] \arrow[rr, "f"] &          & E' \arrow[ld, "\alpha'_c"] \\
@@ -161,9 +161,9 @@ and similarly for the coend. Since we have a twisted arrow $\infty$-category \ci
 
 %Let's contemplate what is a good definition of morphism between two such bimodules. Of course we could take additive natural transformations, and this will recover the standard definition of bimodule homomorphism. However, there is something a bit more fundamental: taking the view that an $R-$bimodule acts by $r$ on $M$
 
-%Returning to our example of an $R-$bimodule $M':R^{op}\times R\rightarrow Ab$, a natural transformation between two bimodules $M'$ and $N'$ is exactly a bimodule homomorphism. For more complicated categorical bimodules, however, we do not recover the correct notion of morphism. As an example, we can define a \defn{ringoid} $\mathcal{R}$ as an $Ab-$category, similar to how we define a \defn{groupoid} as a many-object group. Let us consider an additive functor $\mathcal{M}':\mathcal{R}^{op}\times \mathcal{R}\rightarrow Ab$, which we will call a bimodule over the ringoid $\mathcal{R}$. What is a natural definition of an $\mathcal{R}-$bimodule homomorphism? On one hand, we can ask for an additive natural transformation $\alpha:\mathcal{M'}\Rightarrow N'$, whose components $\alpha_{(S,R)}:\prescript{}{R}{M}_S\rightarrow \prescript{}{R}{N}_S$ would be $(R,S)$-bimodule homomorphisms.
+%Returning to our example of an $R-$bimodule $M':R^{op}\times R\rightarrow Ab$, a natural transformation between two bimodules $M'$ and $N'$ is exactly a bimodule homomorphism. For more complicated bifunctors, however, we do not recover the correct notion of morphism. As an example, we can define a \defn{ringoid} $\mathcal{R}$ as an $Ab-$category, similar to how we define a \defn{groupoid} as a many-object group. Let us consider an additive functor $\mathcal{M}':\mathcal{R}^{op}\times \mathcal{R}\rightarrow Ab$, which we will call a bimodule over the ringoid $\mathcal{R}$. What is a natural definition of an $\mathcal{R}-$bimodule homomorphism? On one hand, we can ask for an additive natural transformation $\alpha:\mathcal{M'}\Rightarrow N'$, whose components $\alpha_{(S,R)}:\prescript{}{R}{M}_S\rightarrow \prescript{}{R}{N}_S$ would be $(R,S)$-bimodule homomorphisms.
 \section{(Co)end formulas}\label{sec:coend-proofs}
-We give brief proofs of the main (co)end formulas from Section \ref{sec:categorical-bimodule}.
+We give brief proofs of the main (co)end formulas from Section \ref{sec:bifunctor}.
 
 \begin{prop}[Natural transformations as end]\label{prop:nat-as-end}
 
